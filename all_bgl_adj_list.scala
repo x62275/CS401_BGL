@@ -48,12 +48,7 @@ def g(n:Int, display:Boolean = false) {
                     val outprime = out.clone
                     outprime(i) +:= j
                     inprime(j) +:= i
-                    val p = new Thread(new Runnable{
-                        def run{
-                           f(inprime, outprime, current + 1) 
-                        }
-                    })
-                    p.start()
+                    f(inprime, outprime, current + 1) 
                 }
             }
         }
@@ -61,4 +56,4 @@ def g(n:Int, display:Boolean = false) {
     f(inita, initb)
 }
 println("example when n=4")
-println(g(4, true))
+g(4, true)
