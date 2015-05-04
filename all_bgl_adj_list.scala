@@ -1,5 +1,6 @@
+import runtime.ScalaRunTime.stringOf
 //O( 2^(n) )
-def g(n:Int, display:Boolean = false):Long = {
+def g(n:Int, display:Boolean = false) {
     //this matrix is configured such that i points to j
     //in a bipartite gracefully labeled matrix
     val inita:Array[List[Int]] = Array.fill(n)(List())
@@ -19,36 +20,43 @@ def g(n:Int, display:Boolean = false):Long = {
         }.toList
     }
     val sequence = (0 to n-1).map(sequence_from_diagonal).toArray
-    def f(in:Array[List[Int]], out:Array[List[Int]], current:Int = 0):Long = {
+    def f(in:Array[List[Int]], out:Array[List[Int]], current:Int = 0) {
         def emptyrow(i:Int):Boolean = out(i) == List.empty
         def emptycolumn(j:Int):Boolean = in(j) == List.empty
         def printA {
             //this just prints our matrix to the commandline
-            ???
+            this.synchronized{
+                println("IN:  " + stringOf(in))
+                println("OUT: " + stringOf(out))
+            }
         }
         if(current == n-1) {
             //this is the base case, this diagonal should 
             //just be a row of zeros
-            //if(display) printA
-            return 1
+            if(display) printA
         }
-        val totest = sequence(current)
-        totest.map{ t:(Int, Int) =>
-            val (i, j) = t
-            //if the column is empty corresponding to i
-            //and the row is empty corresponding to j
-            //then we can look at it
-            //otherwise choosing that point breaks
-            //the bipartite case
-            if(emptyrow(j) && emptycolumn(i)){
-                val inprime = in.clone
-                val outprime = out.clone
-                outprime(i) +:= j
-                inprime(j) +:= i
-                f(inprime, outprime, current + 1)
+        else{
+            sequence(current).foreach{ t:(Int, Int) =>
+                val (i, j) = t
+                //if the column is empty corresponding to i
+                //and the row is empty corresponding to j
+                //then we can look at it
+                //otherwise choosing that point breaks
+                //the bipartite case
+                if(emptyrow(j) && emptycolumn(i)){
+                    val inprime = in.clone
+                    val outprime = out.clone
+                    outprime(i) +:= j
+                    inprime(j) +:= i
+                    val p = new Thread(new Runnable{
+                        def run{
+                           f(inprime, outprime, current + 1) 
+                        }
+                    })
+                    p.start()
+                }
             }
-            else 0
-        }.sum
+        }
     }
     f(inita, initb)
 }
