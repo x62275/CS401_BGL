@@ -134,7 +134,6 @@ def g(n:Int, display:Boolean = false) {
             //just be a row of zeros
             if(display) printA
             val t = adjList_toTree(in, out)
-            if(t=="12341234") printA
             if(!inSet(t)) unique +:= t
         }
         else{
@@ -157,7 +156,7 @@ def g(n:Int, display:Boolean = false) {
     }
     f(inita, initb)
     println(unique.size)
-    println(stringOf(unique)) //comment me
+    // println(stringOf(unique)) //comment me
 }
 println("example when n=4")
 g(4, true)
