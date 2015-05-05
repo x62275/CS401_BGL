@@ -50,10 +50,10 @@ def adjList_toTree(in:Array[List[Int]], out:Array[List[Int]]):String = {
         val posibilities = merge(position)
         //anything that has not been taken yet?
         //otherwise, take one that has been taken
-        val weights:List[(Int, Int)] = posibilities.map(p=> (p, edges(Math.abs(position-p))))
+        val weights:List[(Int, Int)] = posibilities.map(p=> (p, edges(abs(position-p))))
         val next = weights.minBy(_._2)._1
         //increment where i'm going in edges
-        val e = Math.abs(position-next)
+        val e = abs(position-next)
         edges(e) = edges(e) + 1
         //update position
         position = next
