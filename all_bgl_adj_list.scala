@@ -49,7 +49,7 @@ def walk(tree1:String):Set[String]={
     }
     result
 }
-def adjList_toTree(in:Array[List[Int]], out:Array[List[Int]]):String = {
+def adjList_toTree(merge:Array[List[Int]]):String = {
     // the unlabeled, unrooted tree:
     // o-o-o-o                  1-2-3-4
     //   |          consider      |
@@ -57,10 +57,7 @@ def adjList_toTree(in:Array[List[Int]], out:Array[List[Int]]):String = {
     // is denoted 1-2-3-4-3-2-5-2
     // this is found by traversing the tree clockwise
     // and labeling each edge in the order it was witnessed
-    val n = in.size
-    val merge:Array[List[Int]] = in.indices.map{ i =>
-        in(i) ++ out(i)
-    }.toArray
+    val n = merge.size
     var result:List[Int] = List()
     val edges = Array.fill[Int](n)(0)
     var position = 0
@@ -132,9 +129,14 @@ def g(n:Int, display:Boolean = false) {
         if(current == n-1) {
             //this is the base case, this diagonal should 
             //just be a row of zeros
-            if(display) printA
-            val t = adjList_toTree(in, out)
-            if(!inSet(t)) unique +:= t
+            val merge:Array[List[Int]] = in.indices.map{ i =>
+                in(i) ++ out(i)
+            }.toArray
+            if(!merge.contains(List.empty)){
+                if(display) printA
+                val t = adjList_toTree(merge)
+                if(!inSet(t)) unique +:= t
+            }
         }
         else{
             sequence(current).foreach{ t:(Int, Int) =>
@@ -160,9 +162,4 @@ def g(n:Int, display:Boolean = false) {
 }
 println("example when n=4")
 g(4, true)
-
-// IN:  Array(List(), List(), List(), List(2, 0), List(2, 0))
-// OUT: Array(List(3, 4), List(), List(3, 4), List(), List())
-// IN:  Array(List(), List(), List(1, 0), List(), List(1, 0))
-// OUT: Array(List(2, 4), List(2, 4), List(), List(), List())
-// these are not valid bgl - find the issue
+//g(7) should be 11 but is 18
