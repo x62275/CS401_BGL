@@ -134,6 +134,7 @@ def g(n:Int, display:Boolean = false) {
             //just be a row of zeros
             if(display) printA
             val t = adjList_toTree(in, out)
+            if(t=="12341234") printA
             if(!inSet(t)) unique +:= t
         }
         else{
@@ -156,6 +157,13 @@ def g(n:Int, display:Boolean = false) {
     }
     f(inita, initb)
     println(unique.size)
+    println(stringOf(unique)) //comment me
 }
 println("example when n=4")
 g(4, true)
+
+// IN:  Array(List(), List(), List(), List(2, 0), List(2, 0))
+// OUT: Array(List(3, 4), List(), List(3, 4), List(), List())
+// IN:  Array(List(), List(), List(1, 0), List(), List(1, 0))
+// OUT: Array(List(2, 4), List(2, 4), List(), List(), List())
+// these are not valid bgl - find the issue
